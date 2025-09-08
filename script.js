@@ -29,27 +29,40 @@ class HashMap {
     }
   }
   // Returns the value that is assigned to the given key. If a key is not found, returns null
-  get(key){
-    const hashedKey = this.hash(key)
-    if(hashedKey in this.buckets){
-        const totalNodes = this.buckets[hashedKey].totalNodes
-        if(totalNodes === 1){
-            return this.buckets[hashedKey].head.value
+  get(key) {
+    const hashedKey = this.hash(key);
+    if (hashedKey in this.buckets) {
+      const totalNodes = this.buckets[hashedKey].totalNodes;
+      if (totalNodes === 1) {
+        return this.buckets[hashedKey].head.value;
+      }
+      let currentNode = this.buckets[hashedKey].head;
+      for (let i = 0; i < totalNodes; i++) {
+        if (currentNode.key === key) {
+          return currentNode.value;
         }
-        let currentNode = this.buckets[hashedKey].head
-        for(let i = 0; i < totalNodes; i++){
-            if(currentNode.key === key){
-                return currentNode.value
-            }
-            currentNode = currentNode.nextNode
-        }
+        currentNode = currentNode.nextNode;
+      }
     }
-    return null
+    return null;
+  }
+  // Returns true or false based on whether or not the given key is in the hash map
+  has(key) {
+    const hashedKey = this.hash(key);
+    if (hashedKey in this.buckets) {
+      const totalNodes = this.buckets[hashedKey].totalNodes;
+      if (totalNodes === 1 && this.buckets[hashedKey].key === key) {
+        return true
+      }
+      let currentNode = this.buckets[hashedKey].head
+      for(let i = 0; i < totalNodes; i++){
+        if(currentNode.key === key){
+          return true
+        }
+      }
+    }
+    return false
   }
 }
 let a = new HashMap();
-// a.set("Sara", "Hiii")
-// a.set("raSa", "Hello")
-let v = a.get("Sara")
-console.log(v)
-// console.log(a)
+a.set("Sara", "Hiii")
