@@ -106,10 +106,12 @@ class HashMap {
   length(){
     let totalKeys = 0
     this.buckets.forEach(bucket =>{
-      let currentNode = bucket.head
-      for(let i = 0; i < bucket.totalNodes; i++){
-        totalKeys++
-        currentNode = currentNode.nextNode
+      if(typeof bucket === "object"){
+        let currentNode = bucket.head
+        for(let i = 0; i < bucket.totalNodes; i++){
+          totalKeys++
+          currentNode = currentNode.nextNode
+        }
       }
     })
     return totalKeys
@@ -119,5 +121,25 @@ class HashMap {
     this.buckets = new Array(this.capacity)
     this.size = 0
   }
+  // Returns an array containing all the keys inside the hash map.
+  keys(){
+    let keysArr = []
+    this.buckets.forEach(bucket =>{
+      if(typeof bucket === "object"){
+        let currentNode = bucket.head
+        for(let i = 0; i < bucket.totalNodes; i++){
+          keysArr.push(currentNode.key)
+          currentNode = currentNode.nextNode
+        }
+      }
+    })
+    return keysArr
+  }
 }
 let a = new HashMap();
+// a.set("hi", "1");
+// a.set("hello", "2");
+// a.set("world", "3");
+// a.set("foo", "4");
+// a.set("bar", "5");
+
