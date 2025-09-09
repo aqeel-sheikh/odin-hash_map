@@ -149,13 +149,19 @@ class HashMap {
     })
     return valuesArr
   }
+  // Returns an array containing all [key, value] pairs in hashmap
+  entries(){
+    const entriesArr = []
+    this.buckets.forEach(bucket =>{
+      if(typeof bucket === "object"){
+        let currentNode = bucket.head
+        for(let i = 0; i < bucket.totalNodes; i++){
+          entriesArr.push([currentNode.key, currentNode.value])
+          currentNode = currentNode.nextNode
+        }
+      }
+    }) 
+    return entriesArr
+  }
 }
-let a = new HashMap();
-a.set("hi", "1");
-a.set("hello", "2");
-a.set("world", "3");
-a.set("foo", "4");
-a.set("bar", "5");
-console.log("Keys: ",a.keys())
-console.log("Values: ",a.values())
 
