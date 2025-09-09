@@ -10,7 +10,6 @@ class HashMap {
   // Hash the key
   hash(key) {
     let hashCode = 0;
-
     const primeNumber = 31;
     for (let i = 0; i < key.length; i++) {
       hashCode =
@@ -51,18 +50,65 @@ class HashMap {
     const hashedKey = this.hash(key);
     if (hashedKey in this.buckets) {
       const totalNodes = this.buckets[hashedKey].totalNodes;
-      if (totalNodes === 1 && this.buckets[hashedKey].key === key) {
-        return true
+      if (totalNodes === 1 && this.buckets[hashedKey].head.key === key) {
+        return true;
       }
-      let currentNode = this.buckets[hashedKey].head
-      for(let i = 0; i < totalNodes; i++){
-        if(currentNode.key === key){
-          return true
+      let currentNode = this.buckets[hashedKey].head;
+      for (let i = 0; i < totalNodes; i++) {
+        if (currentNode.key === key) {
+          return true;
         }
       }
     }
-    return false
+    return false;
+  }
+  // Remove the entry with the given key and return true. If the key isn’t in the hash map,return false
+  remove(key) {
+    const hashedKey = this.hash(key);
+    const bucket = this.buckets[hashedKey];
+    if (!bucket || bucket.totalNodes === 0) return false;
+
+    let removed = false;
+
+    // Special case: only one node
+    if (bucket.totalNodes === 1 && bucket.head.key === key) {
+      delete this.buckets[hashedKey];
+      return true;
+    }
+
+    let currentNode = bucket.head;
+    let prevNode = null;
+
+    for (let i = 0; i < bucket.totalNodes; i++) {
+      if (i === 0 && currentNode.key === key) {
+        bucket.head = currentNode.nextNode;
+        if (currentNode.nextNode === null) bucket.tail = null;
+        removed = true;
+        break;
+      }
+      if (currentNode.nextNode && currentNode.nextNode.key === key) {
+        prevNode = currentNode;
+        prevNode.nextNode = currentNode.nextNode.nextNode;
+        if (prevNode.nextNode === null) bucket.tail = prevNode;
+        removed = true;
+        break;
+      }
+      currentNode = currentNode.nextNode;
+    }
+
+    if (removed) {
+      bucket.totalNodes--;
+      return true;
+    }
+    return false;
   }
 }
 let a = new HashMap();
-a.set("Sara", "Hiii")
+a.set("AAa", "FirstNode");
+a.set("AaA", "SecondNode");
+a.set("aAA", "ThirdNode");
+// a.remove("aAA");
+// a.remove("AaA");
+console.log("Before Remove: ", a.buckets);
+a.remove("AAa");
+console.log("After Remove: ", a.buckets);
