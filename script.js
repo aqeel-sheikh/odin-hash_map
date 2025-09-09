@@ -128,17 +128,7 @@ class HashMap {
   }
   // Returns the number of keys stored in the hashmap
   length() {
-    let totalKeys = 0;
-    this.buckets.forEach((bucket) => {
-      if (typeof bucket === "object") {
-        let currentNode = bucket.head;
-        for (let i = 0; i < bucket.totalNodes; i++) {
-          totalKeys++;
-          currentNode = currentNode.nextNode;
-        }
-      }
-    });
-    return totalKeys;
+    return this.size;
   }
   // Removes all entries in the hash map
   clear() {
