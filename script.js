@@ -58,6 +58,7 @@ class HashMap {
         if (currentNode.key === key) {
           return true;
         }
+        currentNode = currentNode.nextNode
       }
     }
     return false;
@@ -164,4 +165,11 @@ class HashMap {
     return entriesArr
   }
 }
-
+let a = new HashMap()
+a.set("AAa", "1");
+a.set("aAa", "a1");
+a.set("hello", "2");
+a.set("world", "3");
+a.set("foo", "4");
+a.set("bar", "5");
+console.log(a.has("aAa"))
