@@ -7,6 +7,23 @@ class HashMap {
     this.capacity = initialCapacity;
     this.loadFactor = loadFactor;
   }
+  // Double the size of buckets array after reaching the threshold
+  #_resize(newCapacity) {
+    const oldBuckets = this.buckets;
+    this.capacity = newCapacity;
+    this.buckets = new Array(this.capacity);
+    this.size = 0;
+
+    for (let bucket of oldBuckets) {
+      if (bucket) {
+        let currentNode = bucket.head;
+        for (let i = 0; i < bucket.totalNodes; i++) {
+          this.set(currentNode.key, currentNode.value);
+          currentNode = currentNode.nextNode;
+        }
+      }
+    }
+  }
   // Hash the key
   hash(key) {
     let hashCode = 0;
@@ -20,12 +37,16 @@ class HashMap {
   // Add an item(key:value) in the hash map
   set(key, value) {
     const hashedKey = this.hash(key);
+    if ((this.size + 1) / this.capacity > this.loadFactor) {
+      this.#_resize(this.capacity * 2);
+    }
     if (!this.buckets[hashedKey]) {
       this.buckets[hashedKey] = new LinkedList();
       this.buckets[hashedKey].insert(key, value);
     } else {
       this.buckets[hashedKey].insert(key, value);
     }
+    this.size++;
   }
   // Returns the value that is assigned to the given key. If a key is not found, returns null
   get(key) {
@@ -58,7 +79,7 @@ class HashMap {
         if (currentNode.key === key) {
           return true;
         }
-        currentNode = currentNode.nextNode
+        currentNode = currentNode.nextNode;
       }
     }
     return false;
@@ -74,6 +95,7 @@ class HashMap {
     // Special case: only one node
     if (bucket.totalNodes === 1 && bucket.head.key === key) {
       delete this.buckets[hashedKey];
+      this.size--;
       return true;
     }
 
@@ -99,77 +121,70 @@ class HashMap {
 
     if (removed) {
       bucket.totalNodes--;
+      this.size--;
       return true;
     }
     return false;
   }
   // Returns the number of keys stored in the hashmap
-  length(){
-    let totalKeys = 0
-    this.buckets.forEach(bucket =>{
-      if(typeof bucket === "object"){
-        let currentNode = bucket.head
-        for(let i = 0; i < bucket.totalNodes; i++){
-          totalKeys++
-          currentNode = currentNode.nextNode
+  length() {
+    let totalKeys = 0;
+    this.buckets.forEach((bucket) => {
+      if (typeof bucket === "object") {
+        let currentNode = bucket.head;
+        for (let i = 0; i < bucket.totalNodes; i++) {
+          totalKeys++;
+          currentNode = currentNode.nextNode;
         }
       }
-    })
-    return totalKeys
+    });
+    return totalKeys;
   }
   // Removes all entries in the hash map
-  clear(){
-    this.buckets = new Array(this.capacity)
-    this.size = 0
+  clear() {
+    this.buckets = new Array(this.capacity);
+    this.size = 0;
   }
   // Returns an array containing all the keys inside the hash map
-  keys(){
-    let keysArr = []
-    this.buckets.forEach(bucket =>{
-      if(typeof bucket === "object"){
-        let currentNode = bucket.head
-        for(let i = 0; i < bucket.totalNodes; i++){
-          keysArr.push(currentNode.key)
-          currentNode = currentNode.nextNode
+  keys() {
+    let keysArr = [];
+    this.buckets.forEach((bucket) => {
+      if (typeof bucket === "object") {
+        let currentNode = bucket.head;
+        for (let i = 0; i < bucket.totalNodes; i++) {
+          keysArr.push(currentNode.key);
+          currentNode = currentNode.nextNode;
         }
       }
-    })
-    return keysArr
+    });
+    return keysArr;
   }
   // Returns an array containing all the values
-  values(){
-    let valuesArr = []
-    this.buckets.forEach(bucket =>{
-      if(typeof bucket === "object"){
-        let currentNode = bucket.head
-        for(let i = 0; i < bucket.totalNodes; i++){
-          valuesArr.push(currentNode.value)
-          currentNode = currentNode.nextNode
+  values() {
+    let valuesArr = [];
+    this.buckets.forEach((bucket) => {
+      if (typeof bucket === "object") {
+        let currentNode = bucket.head;
+        for (let i = 0; i < bucket.totalNodes; i++) {
+          valuesArr.push(currentNode.value);
+          currentNode = currentNode.nextNode;
         }
       }
-    })
-    return valuesArr
+    });
+    return valuesArr;
   }
   // Returns an array containing all [key, value] pairs in hashmap
-  entries(){
-    const entriesArr = []
-    this.buckets.forEach(bucket =>{
-      if(typeof bucket === "object"){
-        let currentNode = bucket.head
-        for(let i = 0; i < bucket.totalNodes; i++){
-          entriesArr.push([currentNode.key, currentNode.value])
-          currentNode = currentNode.nextNode
+  entries() {
+    const entriesArr = [];
+    this.buckets.forEach((bucket) => {
+      if (typeof bucket === "object") {
+        let currentNode = bucket.head;
+        for (let i = 0; i < bucket.totalNodes; i++) {
+          entriesArr.push([currentNode.key, currentNode.value]);
+          currentNode = currentNode.nextNode;
         }
       }
-    }) 
-    return entriesArr
+    });
+    return entriesArr;
   }
 }
-let a = new HashMap()
-a.set("AAa", "1");
-a.set("aAa", "a1");
-a.set("hello", "2");
-a.set("world", "3");
-a.set("foo", "4");
-a.set("bar", "5");
-console.log(a.has("aAa"))
