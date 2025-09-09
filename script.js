@@ -114,6 +114,10 @@ class HashMap {
     })
     return totalKeys
   }
+  // Removes all entries in the hash map
+  clear(){
+    this.buckets = new Array(this.capacity)
+    this.size = 0
+  }
 }
 let a = new HashMap();
-console.log(a.length())
