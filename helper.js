@@ -33,26 +33,4 @@ export class LinkedList {
       this.totalNodes++;
     }
   }
-  remove(index,key) {
-    if (this.head === null) return false;
-
-    if (this.totalNodes === 1) {
-      this.head = null;
-      this.tail = null;
-      this.totalNodes = 0;
-      return true;
-    }
-
-    if (this.totalNodes === 2) {
-      this.head.nextNode = null;
-      this.tail = this.head;
-      this.totalNodes -= 1;
-      return true;
-    }
-
-    // let currentNode = this.head;
-    // for (let i = 0; i < this.totalNodes; i++) {
-    //   if(currentNode.nextNode)
-    // }
-  }
 }

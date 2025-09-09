@@ -102,13 +102,18 @@ class HashMap {
     }
     return false;
   }
+  // Returns the number of keys stored in the hashmap
+  length(){
+    let totalKeys = 0
+    this.buckets.forEach(bucket =>{
+      let currentNode = bucket.head
+      for(let i = 0; i < bucket.totalNodes; i++){
+        totalKeys++
+        currentNode = currentNode.nextNode
+      }
+    })
+    return totalKeys
+  }
 }
 let a = new HashMap();
-a.set("AAa", "FirstNode");
-a.set("AaA", "SecondNode");
-a.set("aAA", "ThirdNode");
-// a.remove("aAA");
-// a.remove("AaA");
-console.log("Before Remove: ", a.buckets);
-a.remove("AAa");
-console.log("After Remove: ", a.buckets);
+console.log(a.length())
